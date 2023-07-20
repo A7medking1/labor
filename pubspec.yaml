@@ -1,0 +1,65 @@
+name: labour
+description: A new Flutter project.
+
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.3 <4.0.0'
+
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+
+  cupertino_icons: ^1.0.2
+  flutter_screenutil: ^5.7.0
+  easy_localization: ^3.0.2
+  flutter_phoenix: ^1.1.1
+  cached_network_image: ^3.2.3
+  shimmer: ^3.0.0
+  flutter_rating_bar: ^4.0.1
+  uuid: ^3.0.7
+  dartz: ^0.10.1
+  equatable: ^2.0.5
+  flutter_svg: ^2.0.4
+  shared_preferences: ^2.0.20
+  get_it: ^7.2.0
+  go_router: ^9.0.3
+  bloc: ^8.1.1
+  flutter_bloc: ^8.1.2
+  hive: ^2.2.3
+  hive_generator: ^2.0.0
+  cloud_firestore: ^4.8.0
+  firebase_core: ^2.13.1
+  firebase_auth: ^4.6.2
+  carousel_slider: ^4.2.1
+  dots_indicator: ^3.0.0
+  horizontal_stepper_flutter: ^1.0.3
+  intl:
+  scrollable_positioned_list: ^0.3.8
+  date_picker_timeline: ^1.2.5
+  awesome_dialog: ^2.2.1
+  pin_code_fields: ^8.0.1
+  image_picker: ^1.0.1
+  firebase_storage: ^11.2.5
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/svg/
+    - assets/translations/ar-SA.json
+    - assets/translations/en-US.json
