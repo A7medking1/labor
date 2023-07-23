@@ -19,9 +19,9 @@ class CompanyModel extends Company {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
-      'nameAr': nameAr,
+      'name_ar': nameAr,
       'desc': desc,
-      'descAr': descAr,
+      'desc_ar': descAr,
       'hour': hour,
       'image': image,
       'price': price,

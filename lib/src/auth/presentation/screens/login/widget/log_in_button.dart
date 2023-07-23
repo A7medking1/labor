@@ -1,14 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:labour/src/auth/presentation/controller/auth_bloc.dart';
-import 'package:labour/src/core/app_prefs/app_prefs.dart';
 import 'package:labour/src/core/presentation/widget/custom_button.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
-import 'package:labour/src/core/resources/flutter_toast.dart';
-import 'package:labour/src/core/resources/routes_manager.dart';
-import 'package:labour/src/core/services_locator/services_locator.dart';
 
 class SignInButton extends StatelessWidget {
   const SignInButton({

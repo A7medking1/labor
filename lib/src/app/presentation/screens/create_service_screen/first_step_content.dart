@@ -1,3 +1,4 @@
+import 'package:csc_picker/csc_picker.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,28 +8,64 @@ import 'package:labour/src/app/presentation/screens/create_service_screen/cubit/
 import 'package:labour/src/core/presentation/widget/custom_drop_menu.dart';
 import 'package:labour/src/core/resources/app_colors.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
+import 'package:labour/src/core/resources/style.dart';
 
 class FirstStepContent extends StatelessWidget {
   const FirstStepContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return  Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        PeriodContent(),
+        const PeriodContent(),
+        const SizedBox(
+          height: 20,
+        ),
+        const NumberOfMonthContent(),
+        const SizedBox(
+          height: 20,
+        ),
+
+        CSCPicker(
+          defaultCountry: CscCountry.Egypt,
+          layout: Layout.vertical,
+          dropdownHeadingStyle: getBoldStyle(),
+          showStates: false,
+          dropdownItemStyle: getBoldStyle(),
+          selectedItemStyle: getBoldStyle(),
+          dropdownDecoration: const BoxDecoration(
+
+          ),
+
+          onCountryChanged: (value) {
+            print(value);
+           /* setState(() {
+              countryValue = value;
+            });*/
+          },
+          onStateChanged:(value) {
+            print(value);
+
+           /* setState(() {
+              stateValue = value;
+            });*/
+          },
+          onCityChanged:(value) {
+            print(value);
+
+          /*  setState(() {
+              cityValue = value;
+            });*/
+          },
+        ),
+
+
+        /*ChooseNationality(),
         SizedBox(
           height: 20,
         ),
-        NumberOfMonthContent(),
-        SizedBox(
-          height: 20,
-        ),
-        ChooseNationality(),
-        SizedBox(
-          height: 20,
-        ),
-        ChooseCity(),
+        ChooseCity(),*/
       ],
     );
   }

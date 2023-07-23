@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:labour/src/app/data/data/model/location_model.dart';
+import 'package:labour/src/app/data/model/location_model.dart';
 import 'package:labour/src/app/domain/entity/location.dart';
 import 'package:labour/src/app/presentation/controller/locations_bloc/locations_bloc.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
@@ -14,13 +14,27 @@ import 'package:labour/src/core/resources/app_strings.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
 
-class LocationsScreen extends StatelessWidget {
+class LocationsScreen extends StatefulWidget {
   const LocationsScreen({super.key});
+
+  @override
+  State<LocationsScreen> createState() => _LocationsScreenState();
+}
+
+class _LocationsScreenState extends State<LocationsScreen> {
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<LocationsBloc>().add(GetCurrentLocationEvent());
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<LocationsBloc, LocationsState>(
       builder: (context, state) {
+        print('LocationsScreen');
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -45,7 +59,7 @@ class LocationsScreen extends StatelessWidget {
                       final currentIndex =
                           context.read<LocationsBloc>().currentLocation;
 
-                      Location current = state.locations.singleWhere(
+                      LocationEntity current = state.locations.singleWhere(
                           (element) => element.city == currentIndex);
 
                       LocationsModel locationsModel = LocationsModel(
@@ -55,9 +69,7 @@ class LocationsScreen extends StatelessWidget {
                         building: current.building,
                       );
                       sl<AppPreferences>().setLocation(locationsModel);
-                      context
-                          .read<LocationsBloc>()
-                          .add(const GetLocationFromPrefsEvent());
+                      context.read<LocationsBloc>().add(const GetLocationFromPrefsEvent());
                       context.pop();
                     },
                     text: AppStrings.select.tr(),
@@ -157,7 +169,7 @@ class EmptyLocations extends StatelessWidget {
 }
 
 class BuildLocationCard extends StatelessWidget {
-  final Location location;
+  final LocationEntity location;
   final void Function()? onTapDelButton;
 
   const BuildLocationCard({

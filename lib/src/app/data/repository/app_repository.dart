@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:labour/src/app/data/data/datasource/remote_data_source.dart';
-import 'package:labour/src/app/data/data/model/service_model.dart';
+import 'package:labour/src/app/data/datasource/remote_data_source.dart';
+import 'package:labour/src/app/data/model/order_model.dart';
+import 'package:labour/src/app/data/model/service_model.dart';
 import 'package:labour/src/app/domain/entity/category.dart';
 import 'package:labour/src/app/domain/entity/comment.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
@@ -41,7 +42,7 @@ class AppRepository extends BaseAppRepository {
   }
 
   @override
-  Future<Either<Failure, List<Location>>> getLocations() async {
+  Future<Either<Failure, List<LocationEntity>>> getLocations() async {
     try {
       final result = await remoteAppDataSource.getLocations();
       return Right(result);
@@ -137,6 +138,16 @@ class AppRepository extends BaseAppRepository {
   Future<Either<Failure, double>> getRating(String companyUid) async {
     try {
       final result = await remoteAppDataSource.getRating(companyUid);
+      return Right(result);
+    } on FireException catch (e) {
+      return Left(ServerFailure(e.message!));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> saveOrderToFireStore(OrderModel order) async {
+    try {
+      final result = await remoteAppDataSource.saveOrder(order);
       return Right(result);
     } on FireException catch (e) {
       return Left(ServerFailure(e.message!));

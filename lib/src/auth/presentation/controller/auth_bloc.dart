@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:country_picker/country_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -48,6 +49,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final TextEditingController codeSms = TextEditingController();
   GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
   GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+
+  Country country = Country(
+    phoneCode: '20',
+    countryCode: 'EG',
+    e164Sc: 0,
+    geographic: true,
+    level: 1,
+    name: 'Egypt',
+    example: '1001234567',
+    displayName: 'Egypt (EG) [+20]',
+    displayNameNoCountryCode: 'Egypt (EG)',
+    e164Key: '20-EG-0',
+  );
+
 
   FutureOr<void> _logIn(LogInEvent event, Emitter<AuthState> emit) async {
     emit(
@@ -125,8 +140,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _sendOtpToPhone(
       SendOtpToPhoneEvent event, Emitter<AuthState> emit) async {
+    print('+${country.phoneCode}${phone.text}');
     await sl<FirebaseAuth>().verifyPhoneNumber(
-      phoneNumber: event.phoneNumber,
+      phoneNumber: '+${country.phoneCode}${phone.text}',
       verificationCompleted: (PhoneAuthCredential credential) async {},
       codeSent: (String verificationId, int? resendToken) {
         event.context.pushNamed(Routes.verifyScreen, queryParameters: {

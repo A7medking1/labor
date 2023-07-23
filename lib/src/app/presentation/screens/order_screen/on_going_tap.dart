@@ -6,9 +6,11 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';
 import 'package:labour/src/app/presentation/controller/home_bloc/home_bloc.dart';
+import 'package:labour/src/app/presentation/controller/payment_bloc/payment_cubit.dart';
 import 'package:labour/src/app/presentation/screens/order_screen/order_screen.dart';
 import 'package:labour/src/core/format_date.dart';
 import 'package:labour/src/core/presentation/widget/cached_image_network.dart';
+import 'package:labour/src/core/presentation/widget/custom_loading.dart';
 import 'package:labour/src/core/resources/app_assets.dart';
 import 'package:labour/src/core/resources/app_colors.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
@@ -222,19 +224,46 @@ class OnGoingBuildCard extends StatelessWidget {
                     ),
                     if (!service.paymentStatus) ...[
                       const CustomDivider(),
-                      ListTile(
-                        dense: true,
-                        contentPadding: EdgeInsets.zero,
-                        visualDensity:
-                            const VisualDensity(horizontal: 0, vertical: -4),
-                        title: Text(
-                          AppStrings.complete_payment_methods.tr(),
-                          style:
-                              Theme.of(context).textTheme.titleSmall!.copyWith(
+                      BlocConsumer<PaymentCubit, PaymentState>(
+
+                        listener: (context, state) {
+                          print(state);
+                          if (state is GetAuthTokenLoadingState) {
+                            OverlayLoadingProgress.start(context);
+                          }
+                          if (state is GetAuthTokenSuccessState) {
+
+                            OverlayLoadingProgress.stop();
+                          }
+
+                          if (state is GetAuthTokenErrorState) {
+                            OverlayLoadingProgress.stop();
+                          }
+                        },
+                        builder: (context, state) {
+                          return ListTile(
+                            dense: true,
+                            onTap: () {
+                              PaymentCubit.get(context).getAuthToken().then((value) {
+                                context.pushNamed(Routes.completeOrder,
+                                    extra: service);
+                              });
+                            },
+                            contentPadding: EdgeInsets.zero,
+                            visualDensity: const VisualDensity(
+                                horizontal: 0, vertical: -4),
+                            title: Text(
+                              AppStrings.complete_payment_methods.tr(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(
                                     color: AppColors.green,
                                   ),
-                        ),
-                        trailing: const Icon(Icons.arrow_forward_ios),
+                            ),
+                            trailing: const Icon(Icons.arrow_forward_ios),
+                          );
+                        },
                       ),
                     ]
                   ],
@@ -284,6 +313,5 @@ Color serviceStatusColor(String status) {
     case 'canceled':
       return AppColors.errorRed;
   }
-
   return Colors.black;
 }

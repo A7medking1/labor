@@ -3,7 +3,10 @@
 <plist version="1.0">
 <dict>
 
-
+<key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs access to location when open.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>This app needs access to location when in the background.</string>
 <key>NSPhotoLibraryAddUsageDescription</key>
     <string>My description about why I need this capability</string>
 	<key>NSPhotoLibraryUsageDescription</key>

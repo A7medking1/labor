@@ -1,10 +1,15 @@
 import 'package:go_router/go_router.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
+import 'package:labour/src/app/domain/entity/service_entity.dart';
+import 'package:labour/src/app/presentation/screens/complete_oreder_screen/complete_oreder_screen.dart';
+import 'package:labour/src/app/presentation/screens/complete_oreder_screen/toggle_payment_screen.dart';
+import 'package:labour/src/app/presentation/screens/complete_oreder_screen/visa_screen.dart';
 import 'package:labour/src/app/presentation/screens/compony_desc_screen/company_screen.dart';
 import 'package:labour/src/app/presentation/screens/contact_us_screen/contact_us_screen.dart';
 import 'package:labour/src/app/presentation/screens/create_service_screen/create_service_screen.dart';
 import 'package:labour/src/app/presentation/screens/locations_screen/add_locations_screen/add_loaction_screen.dart';
 import 'package:labour/src/app/presentation/screens/locations_screen/locations_screen/locations_screen.dart';
+import 'package:labour/src/app/presentation/screens/locations_screen/map.dart';
 import 'package:labour/src/app/presentation/screens/profile_screen/edit_screen/edit_screen.dart';
 import 'package:labour/src/auth/presentation/screens/login/login_screen.dart';
 import 'package:labour/src/auth/presentation/screens/sign_up/sign_up_screen.dart';
@@ -16,7 +21,6 @@ import 'package:labour/src/splash/splash_screen.dart';
 
 class Routes {
   Routes._();
-
   static const splash = '/';
   static const onBoarding = 'onBoarding';
   static const onBoardingLang = 'onBoardingLang';
@@ -30,11 +34,14 @@ class Routes {
   static const verifyScreen = 'verifyScreen';
   static const company = 'company';
   static const contactUs = 'contact_us';
+  static const completeOrder = 'completeOrder';
+  static const toggleScreen = 'toggleScreen';
+  static const visaScreen = 'visaScreen';
+  static const MapSample = 'MapSample';
 }
 
 class RouterPath {
   RouterPath._();
-
   static const splash = '/';
   static const onBoarding = '/onBoarding';
   static const onBoardingLang = '/onBoardingLang';
@@ -48,6 +55,11 @@ class RouterPath {
   static const verifyScreen = '/verifyScreen';
   static const company = '/company';
   static const contactUs = '/contact_us';
+  static const completeOrder = '/completeOrder';
+  static const toggleScreen = '/toggleScreen';
+  static const visaScreen = '/visaScreen';
+  static const MapSample = '/MapSample';
+
 }
 
 class AppRouter {
@@ -102,6 +114,37 @@ class AppRouter {
         name: Routes.contactUs,
         path: RouterPath.contactUs,
         builder: (context, state) => const ContactUsScreen(),
+      ),
+      GoRoute(
+        name: Routes.MapSample,
+        path: RouterPath.MapSample,
+        builder: (context, state) => const MapSample(),
+      ),
+     /* GoRoute(
+        name: Routes.toggleScreen,
+        path: RouterPath.toggleScreen,
+        builder: (context, state) => const ToggleScreen(),
+      ),*/
+      GoRoute(
+        name: Routes.visaScreen,
+        path: RouterPath.visaScreen,
+        builder: (context, state) =>  VisaScreen(
+          serviceEntity: state.extra as ServiceEntity,
+        ),
+      ),
+      GoRoute(
+        name: Routes.toggleScreen,
+        path: RouterPath.toggleScreen,
+        builder: (context, state) =>  ToggleScreen(
+          serviceEntity: state.extra as ServiceEntity,
+        ),
+      ),
+      GoRoute(
+        name: Routes.completeOrder,
+        path: RouterPath.completeOrder,
+        builder: (context, state) =>   CompleteOrderScreen(
+          serviceEntity: state.extra as ServiceEntity,
+        ),
       ),
       GoRoute(
         name: Routes.verifyScreen,

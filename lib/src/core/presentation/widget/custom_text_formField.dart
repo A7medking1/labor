@@ -7,6 +7,7 @@ class CustomTextFormField extends StatelessWidget {
   final TextEditingController? controller;
 
   final bool obscureText;
+  final Widget? prefixIcon;
 
   final Widget? suffixIcon;
   final String? Function(String?)? validator;
@@ -19,6 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     required this.title,
     this.suffixIcon,
     this.textInputType,
+    this.prefixIcon,
     this.readOnly = false,
     this.validator,
     this.controller,
@@ -60,6 +62,7 @@ class CustomTextFormField extends StatelessWidget {
             ),
             filled: true,
             fillColor: Colors.green.shade50,
+            prefixIcon:  prefixIcon,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(
                 15,

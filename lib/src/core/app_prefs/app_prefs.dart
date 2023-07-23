@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:labour/src/app/data/data/model/location_model.dart';
+import 'package:labour/src/app/data/model/location_model.dart';
 import 'package:labour/src/core/resources/language_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

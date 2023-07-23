@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:labour/src/app/data/data/model/service_model.dart';
+import 'package:labour/src/app/data/model/service_model.dart';
 import 'package:labour/src/app/domain/entity/category.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';

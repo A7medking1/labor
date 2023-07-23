@@ -8,6 +8,7 @@ import 'package:labour/firebase_options.dart';
 import 'package:labour/src/app/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:labour/src/app/presentation/controller/home_bloc/home_bloc.dart';
 import 'package:labour/src/app/presentation/controller/locations_bloc/locations_bloc.dart';
+import 'package:labour/src/app/presentation/controller/payment_bloc/payment_cubit.dart';
 import 'package:labour/src/app/presentation/controller/profile_bloc/profile_bloc.dart';
 import 'package:labour/src/auth/presentation/controller/auth_bloc.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
@@ -64,6 +65,7 @@ class _MyAppState extends State<MyApp> {
       builder: (context, Widget? child) {
         return MultiBlocProvider(
           providers: [
+            BlocProvider(create: (_) => sl<PaymentCubit>()),
             BlocProvider(
                 create: (_) => sl<CategoryBloc>()..add(GetCategoriesEvent())),
             BlocProvider(

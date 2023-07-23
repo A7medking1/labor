@@ -1,10 +1,10 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:labour/src/app/data/data/model/category_model.dart';
-import 'package:labour/src/app/data/data/model/comment_entity.dart';
-import 'package:labour/src/app/data/data/model/company_model.dart';
-import 'package:labour/src/app/data/data/model/location_model.dart';
-import 'package:labour/src/app/data/data/model/service_model.dart';
+import 'package:labour/src/app/data/model/category_model.dart';
+import 'package:labour/src/app/data/model/comment_entity.dart';
+import 'package:labour/src/app/data/model/company_model.dart';
+import 'package:labour/src/app/data/model/location_model.dart';
+import 'package:labour/src/app/data/model/order_model.dart';
+import 'package:labour/src/app/data/model/service_model.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/set_rating_to_company_useCase.dart';
 import 'package:labour/src/auth/data/model/user_model.dart';
@@ -37,6 +37,8 @@ abstract class BaseRemoteAppDataSource {
   Future<double> getRating(String companyUid);
 
   Future<UserModel> getCurrentUser();
+
+  Future<void> saveOrder(OrderModel orderModel);
 }
 
 class AppRemoteDataSource extends BaseRemoteAppDataSource {
@@ -141,7 +143,7 @@ class AppRemoteDataSource extends BaseRemoteAppDataSource {
       final collection =
           firebaseFireStore.collection('user').doc(token).collection('service');
 
-      await collection.doc(const Uuid().v4()).set(
+      await collection.doc(parameters.serviceUid).set(
             parameters.toJson(),
           );
     } on FirebaseException catch (e) {
@@ -257,16 +259,31 @@ class AppRemoteDataSource extends BaseRemoteAppDataSource {
         sum += element.data()['rate'];
       });
 
-      if(sum == 0){
+      if (sum == 0) {
         return 0.0;
       }
 
       double average = sum / data.size;
 
-
       print(average.toStringAsFixed(1));
       // print(double.parse(result.toStringAsFixed(1)));
       return double.parse(average.toStringAsFixed(1));
+    } on FirebaseException catch (e) {
+      throw FireException(e.message);
+    }
+  }
+
+  @override
+  Future<void> saveOrder(OrderModel orderModel) async {
+    try {
+      final token = sl<AppPreferences>().getUserToken();
+
+      final collection =
+          firebaseFireStore.collection('user').doc(token).collection('order');
+
+      await collection.doc(orderModel.orderUid).set(
+            orderModel.toJson(),
+          );
     } on FirebaseException catch (e) {
       throw FireException(e.message);
     }

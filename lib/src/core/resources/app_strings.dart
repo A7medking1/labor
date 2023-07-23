@@ -124,4 +124,32 @@ class AppStrings {
   static const String comments = 'comments';
   static const String add_comment = 'add_comment';
   static const String step = 'step';
+
+  //
+
+  static const String complete_order = 'complete_order';
+  static const String my_order_details = 'my_order_details';
+  static const String name_of_order = 'name_of_order';
+  static const String date_of_order = 'date_of_order';
+  static const String code_of_order = 'code_of_order';
+  static const String details_order = 'details_order';
+  static const String order_states = 'order_states';
+  static const String debit_card = 'debit_card';
+  static const String cash = 'cash';
+  static const String add_new_card = 'add_new_card';
+  static const String leave_notes = 'leave_notes';
+  static const String add_coupon = 'add_coupon';
+  static const String price_order = 'price_order';
+  static const String tax = 'tax';
+  static const String discount = 'discount';
+  static const String total_price = 'total_price';
+  static const String pay = 'pay';
+  static const String my_wallet = 'my_wallet';
+  static const String my_balance = 'my_balance';
+  static const String add_to_wallet = 'add_to_wallet';
+  static const String wallet_discount = 'wallet_discount';
+  static const String have_been_added_to_your_balance =
+      'have_been_added_to_your_balance';
+  static const String have_been_wallet_discount = 'have_been_wallet_discount';
+  static const String your_notes = 'your_notes';
 }

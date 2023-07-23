@@ -3,7 +3,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:labour/src/app/data/data/model/service_model.dart';
+import 'package:labour/src/app/data/model/company_model.dart';
+import 'package:labour/src/app/data/model/location_model.dart';
+import 'package:labour/src/app/data/model/service_model.dart';
 import 'package:labour/src/app/domain/entity/location.dart';
 import 'package:labour/src/app/presentation/controller/home_bloc/home_bloc.dart';
 import 'package:labour/src/app/presentation/screens/create_service_screen/cubit/step_cubit.dart';
@@ -13,10 +15,19 @@ import 'package:labour/src/core/presentation/widget/custom_loading.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
+import 'package:uuid/uuid.dart';
 
 class BottomNavBar extends StatelessWidget {
+
+  final String serviceName;
+
+  final String serviceNameAr;
+
+
   const BottomNavBar({
     super.key,
+    required this.serviceName,
+    required this.serviceNameAr
   });
 
   @override
@@ -62,16 +73,19 @@ class BottomNavBar extends StatelessWidget {
               bottom: 30.0, end: 30, start: 30),
           child: CustomButton(
             onTap: () {
-              Location location = sl<AppPreferences>().getLocation();
+              LocationEntity location = sl<AppPreferences>().getLocation();
               ServiceModel serviceModel = ServiceModel(
+                serviceName:serviceName,
+                serviceNameAr: serviceNameAr,
                 period: periodItems[cubit.periodIndex - 1].title,
                 numberOfMonths: cubit.monthCount,
+                serviceUid: const Uuid().v1(),
                 nationality: cubit.nationality,
                 city: location.city,
-                company: state.company[cubit.company - 1],
+                company: state.company[cubit.company - 1] as CompanyModel,
                 numberOfVisit: cubit.numberOfVisit,
                 dateTime: cubit.dateTime.toString(),
-                location: location,
+                location: location as LocationsModel,
                 serviceStatus: 'in_review',
                 paymentStatus: false,
               );

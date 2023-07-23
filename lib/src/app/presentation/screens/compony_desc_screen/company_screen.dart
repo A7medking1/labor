@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:labour/src/app/data/data/model/comment_entity.dart';
+import 'package:labour/src/app/data/model/comment_entity.dart';
 import 'package:labour/src/app/domain/entity/comment.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
