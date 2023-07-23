@@ -13,6 +13,8 @@ class AddLocationEvent extends LocationsEvent {
   final LocationsModel location;
 
   const AddLocationEvent(this.location);
+
+
 }
 
 class GetLocationFromPrefsEvent extends LocationsEvent {
@@ -26,3 +28,17 @@ class DeleteLocationEvent extends LocationsEvent {
 
   const DeleteLocationEvent(this.city);
 }
+
+
+class GetCurrentLocationEvent extends LocationsEvent {}
+
+
+
+class UpdateMapLocationEvent extends LocationsEvent {
+
+  final LatLng latLng ;
+
+  const UpdateMapLocationEvent(this.latLng);
+}
+
+

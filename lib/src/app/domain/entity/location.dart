@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-class Location extends Equatable {
+class LocationEntity extends Equatable {
   final String city;
 
   final String region;
@@ -10,7 +10,7 @@ class Location extends Equatable {
 
   final String building;
 
-  const Location({
+  const LocationEntity({
     required this.city,
     required this.region,
     required this.street,

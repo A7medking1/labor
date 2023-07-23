@@ -1,18 +1,21 @@
 import 'package:equatable/equatable.dart';
-import 'package:labour/src/app/domain/entity/company.dart';
-import 'package:labour/src/app/domain/entity/location.dart';
+import 'package:labour/src/app/data/model/company_model.dart';
+import 'package:labour/src/app/data/model/location_model.dart';
 
 class ServiceEntity extends Equatable {
   final String period;
   final String numberOfMonths;
   final String nationality;
   final String city;
-  final Company company;
+  final CompanyModel company;
   final String numberOfVisit;
   final String dateTime;
   final String serviceStatus;
   final bool paymentStatus;
-  final Location location;
+  final LocationsModel location;
+  final String serviceUid;
+  final String serviceNameAr;
+  final String serviceName;
 
   const ServiceEntity({
     required this.period,
@@ -25,6 +28,9 @@ class ServiceEntity extends Equatable {
     required this.dateTime,
     required this.serviceStatus,
     required this.paymentStatus,
+    required this.serviceUid,
+    required this.serviceNameAr,
+    required this.serviceName,
   });
 
   @override
@@ -32,12 +38,15 @@ class ServiceEntity extends Equatable {
         period,
         numberOfMonths,
         nationality,
-    location,
+        location,
         city,
         company,
         numberOfVisit,
         dateTime,
+        serviceNameAr,
+        serviceName,
         serviceStatus,
         paymentStatus,
+        serviceUid,
       ];
 }

@@ -27,22 +27,15 @@ String currentLang = sl<AppPreferences>().getAppLang();
 class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
   @override
   Widget build(BuildContext context) {
-    print(currentLang);
     return BlocBuilder<ProfileBloc, ProfileState>(
       builder: (context, state) {
         return Column(
           children: [
             CustomListTileWidget(
-              title: AppStrings.paymentMethods.tr(),
-              body: AppStrings.addYourCredit.tr(),
-              leadingIcon: AppAssets.card,
-              onTap: () async {
-                /*   sl<AppPreferences>().changeAppLang();
-                Phoenix.rebirth(context);
-                currentLang = sl<AppPreferences>().getAppLang();
-                context.read<ProfileBloc>().add(GetCurrentUserEvent());*/
-              },
-            ),
+                title: AppStrings.paymentMethods.tr(),
+                body: AppStrings.addYourCredit.tr(),
+                leadingIcon: AppAssets.card,
+                onTap: () async {}),
             SizedBox(
               height: 20.h,
             ),
@@ -65,14 +58,9 @@ class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
               leadingIcon: AppAssets.lang,
               trailingWidget: DropdownButton(
                 onChanged: (v) => setState(() {
-                  //MainApp.setLocale(context, Locale(v.toString(), ""));
-                  // sl<AppPreferences>().changeAppLang();
-                  // Phoenix.rebirth(context);
-
                   sl<AppPreferences>().changeAppLang();
                   Phoenix.rebirth(context);
                   currentLang = sl<AppPreferences>().getAppLang();
-                  context.read<ProfileBloc>().add(GetCurrentUserEvent());
                 }),
                 value: currentLang,
                 items: const [
@@ -99,7 +87,7 @@ class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
               title: AppStrings.contactUs.tr(),
               body: AppStrings.forMoreInformation.tr(),
               leadingIcon: AppAssets.calling,
-              onTap: () => context.pushNamed(Routes.contactUs), 
+              onTap: () => context.pushNamed(Routes.contactUs),
             ),
             SizedBox(
               height: 20.h,
@@ -113,9 +101,11 @@ class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
                 sl<AppPreferences>().removeLocation();
                 sl<AppPreferences>().removeOnBoarding();
                 sl<AppPreferences>().removeOnBoardingLang();
-                await FirebaseAuth.instance.signOut().then((value) {
-                  context.goNamed(Routes.login);
-                });
+                await FirebaseAuth.instance.signOut().then(
+                  (value) {
+                    context.goNamed(Routes.login);
+                  },
+                );
               },
             ),
           ],

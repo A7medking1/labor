@@ -1,6 +1,6 @@
 import 'package:labour/src/app/domain/entity/location.dart';
 
-class LocationsModel extends Location {
+class LocationsModel extends LocationEntity {
   const LocationsModel({
     required super.city,
     required super.region,

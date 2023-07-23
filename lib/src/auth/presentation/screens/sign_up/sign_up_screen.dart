@@ -5,11 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:labour/src/auth/presentation/controller/auth_bloc.dart';
 import 'package:labour/src/auth/presentation/screens/sign_up/widget/build_form_field.dart';
 import 'package:labour/src/auth/presentation/screens/sign_up/widget/sign_up_button.dart';
-import 'package:labour/src/core/app_prefs/app_prefs.dart';
 import 'package:labour/src/core/presentation/widget/custom_social_button.dart';
 import 'package:labour/src/core/resources/app_assets.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
-import 'package:labour/src/core/services_locator/services_locator.dart';
 
 class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
@@ -19,17 +17,7 @@ class SignUpScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-        appBar: AppBar(
-          actions: [
-            IconButton(
-              onPressed: () {
-                sl<AppPreferences>().removeOnBoarding();
-                sl<AppPreferences>().changeAppLang();
-              },
-              icon: const Icon(Icons.remove),
-            )
-          ],
-        ),
+        appBar: AppBar(),
         body: const _SignUpScreenContent(),
       ),
     );
