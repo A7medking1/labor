@@ -1,13 +1,18 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dio/dio.dart';
 import 'package:labour/src/app/data/model/category_model.dart';
 import 'package:labour/src/app/data/model/comment_entity.dart';
 import 'package:labour/src/app/data/model/company_model.dart';
 import 'package:labour/src/app/data/model/location_model.dart';
 import 'package:labour/src/app/data/model/order_model.dart';
+import 'package:labour/src/app/data/model/placeModel.dart';
+import 'package:labour/src/app/data/model/place_detail_model.dart';
 import 'package:labour/src/app/data/model/service_model.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/set_rating_to_company_useCase.dart';
 import 'package:labour/src/auth/data/model/user_model.dart';
+import 'package:labour/src/core/api/api_constant.dart';
+import 'package:labour/src/core/api/api_consumer.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
 import 'package:labour/src/core/error/exception.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
@@ -39,12 +44,17 @@ abstract class BaseRemoteAppDataSource {
   Future<UserModel> getCurrentUser();
 
   Future<void> saveOrder(OrderModel orderModel);
+
+  Future<List<PlaceModel>> getPlaceId(String place);
+
+  Future<PlaceDetailModel> getPlaceDetails(String placeId);
 }
 
 class AppRemoteDataSource extends BaseRemoteAppDataSource {
   final FirebaseFirestore firebaseFireStore;
+  final ApiConsumer apiConsumer;
 
-  AppRemoteDataSource(this.firebaseFireStore);
+  AppRemoteDataSource(this.firebaseFireStore, this.apiConsumer);
 
   @override
   Future<List<CategoryModel>> getCategories() async {
@@ -287,5 +297,36 @@ class AppRemoteDataSource extends BaseRemoteAppDataSource {
     } on FirebaseException catch (e) {
       throw FireException(e.message);
     }
+  }
+
+  @override
+  Future<List<PlaceModel>> getPlaceId(String place) async {
+    Response result = await apiConsumer.get(
+      ApiMapConstant.getPlaceId,
+      queryParameters: {
+        'input': place,
+        'type': 'address',
+        'key': ApiMapConstant.apiKey,
+        'components': 'country:eg',
+        'sessiontoken': const Uuid().v4(),
+      },
+    );
+    return List<PlaceModel>.from((result.data['predictions'] as List)
+        .map((e) => PlaceModel.fromJson(e)));
+  }
+
+  @override
+  Future<PlaceDetailModel> getPlaceDetails(String placeId) async {
+    Response result = await apiConsumer.get(
+      ApiMapConstant.getPlaceDetails,
+      queryParameters: {
+        'place_id': placeId,
+        'key': ApiMapConstant.apiKey,
+        'sessiontoken': const Uuid().v4(),
+      },
+    );
+    return PlaceDetailModel.fromJson(
+      result.data['result']['geometry']['location'],
+    );
   }
 }

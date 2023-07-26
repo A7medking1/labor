@@ -22,12 +22,10 @@ class LocationsScreen extends StatefulWidget {
 }
 
 class _LocationsScreenState extends State<LocationsScreen> {
-
   @override
   void initState() {
     super.initState();
     context.read<LocationsBloc>().add(GetCurrentLocationEvent());
-
   }
 
   @override
@@ -69,7 +67,9 @@ class _LocationsScreenState extends State<LocationsScreen> {
                         building: current.building,
                       );
                       sl<AppPreferences>().setLocation(locationsModel);
-                      context.read<LocationsBloc>().add(const GetLocationFromPrefsEvent());
+                      context
+                          .read<LocationsBloc>()
+                          .add(const GetLocationFromPrefsEvent());
                       context.pop();
                     },
                     text: AppStrings.select.tr(),
@@ -198,145 +198,68 @@ class BuildLocationCard extends StatelessWidget {
                 borderRadius: BorderRadiusDirectional.circular(15)),
             child: Padding(
               padding: const EdgeInsetsDirectional.only(
-                  start: 20, top: 10, bottom: 10),
+                  start: 8, top: 10, bottom: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  CircleAvatar(
-                    radius: 35,
-                    backgroundColor: bloc.currentLocation == location.city
-                        ? AppColors.white
-                        : AppColors.green,
-                    child: SvgPicture.asset(
-                      AppAssets.locatio,
-                      color: bloc.currentLocation == location.city
-                          ? AppColors.yellowDark
-                          : Colors.black,
-                      height: 40,
+                  Expanded(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundColor: bloc.currentLocation == location.city
+                              ? AppColors.white
+                              : AppColors.green,
+                          child: SvgPicture.asset(
+                            AppAssets.locatio,
+                            color: bloc.currentLocation == location.city
+                                ? AppColors.yellowDark
+                                : Colors.black,
+                            height: 40,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BuildTileAndBody(
+                                title: 'city',
+                                body: location.city,
+                                currentCityName: location.city,
+                              ),
+                              BuildTileAndBody(
+                                title: 'region',
+                                body: location.region,
+                                currentCityName: location.city,
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BuildTileAndBody(
+                                title: 'street',
+                                body: location.street,
+                                currentCityName: location.city,
+                              ),
+                              BuildTileAndBody(
+                                title: 'building',
+                                body: location.building,
+                                currentCityName: location.city,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'city',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            location.city,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    color: bloc.currentLocation == location.city
-                                        ? Colors.white
-                                        : Colors.black),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'region',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            location.region,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                  color: bloc.currentLocation == location.city
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'street',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            location.street,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    color: bloc.currentLocation == location.city
-                                        ? Colors.white
-                                        : Colors.black),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'building',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    fontSize: 15, fontWeight: FontWeight.w300),
-                          ),
-                          const SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                            location.building,
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleSmall!
-                                .copyWith(
-                                    color: bloc.currentLocation == location.city
-                                        ? Colors.white
-                                        : Colors.black),
-                          ),
-                        ],
-                      ),
-                    ],
                   ),
                   IconButton(
                     onPressed: onTapDelButton,
@@ -354,3 +277,201 @@ class BuildLocationCard extends StatelessWidget {
     );
   }
 }
+
+class BuildTileAndBody extends StatelessWidget {
+  final String title;
+  final String body;
+  final String currentCityName;
+
+  const BuildTileAndBody({
+    super.key,
+    required this.body,
+    required this.title,
+    required this.currentCityName,
+  });
+
+/*
+
+  final LocationEntity location;
+  final LocationsBloc bloc;
+*/
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            title,
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w300,
+                ),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            body,
+            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  fontSize: 10,
+                  color: context.read<LocationsBloc>().currentLocation ==
+                          currentCityName
+                      ? Colors.white
+                      : Colors.black,
+                ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+/*Expanded(
+                    child: Row(
+                      children: [
+                        CircleAvatar(
+                          radius: 35,
+                          backgroundColor: bloc.currentLocation == location.city
+                              ? AppColors.white
+                              : AppColors.green,
+                          child: SvgPicture.asset(
+                            AppAssets.locatio,
+                            color: bloc.currentLocation == location.city
+                                ? AppColors.yellowDark
+                                : Colors.black,
+                            height: 40,
+                          ),
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'city',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  location.city,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                      fontSize: 10,
+                                          color: bloc.currentLocation == location.city
+                                              ? Colors.white
+                                              : Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'region',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                          fontSize: 15, fontWeight: FontWeight.w300),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  location.region,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                    fontSize: 10,
+
+                                    color: bloc.currentLocation == location.city
+                                            ? Colors.white
+                                            : Colors.black,
+                                      ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'street',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                          fontSize: 15, fontWeight: FontWeight.w300),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  location.street,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                      fontSize: 10,
+                                          color: bloc.currentLocation == location.city
+                                              ? Colors.white
+                                              : Colors.black),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'building',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                          fontSize: 15, fontWeight: FontWeight.w300),
+                                ),
+                                const SizedBox(
+                                  height: 5,
+                                ),
+                                Text(
+                                  location.building,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .titleSmall!
+                                      .copyWith(
+                                    fontSize: 10,
+                                          color: bloc.currentLocation == location.city
+                                              ? Colors.white
+                                              : Colors.black),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),*/

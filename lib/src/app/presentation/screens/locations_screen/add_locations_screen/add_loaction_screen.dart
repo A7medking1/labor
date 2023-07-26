@@ -12,6 +12,7 @@ import 'package:labour/src/core/presentation/widget/custom_text_formField.dart';
 import 'package:labour/src/core/resources/app_colors.dart';
 import 'package:labour/src/core/resources/app_strings.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
+import 'package:labour/src/core/resources/style.dart';
 
 class AddLocationScreen extends StatefulWidget {
   const AddLocationScreen({Key? key}) : super(key: key);
@@ -49,6 +50,11 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     super.dispose();
   }
 
+  CameraPosition cameraPosition = const CameraPosition(
+    target: LatLng(31.037933, 31.381523),
+    zoom: 17,
+  );
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<LocationsBloc, LocationsState>(
@@ -82,10 +88,10 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                 children: [
                   InkWell(
                     onTap: () {
-                      print('dd');
                       context.pushNamed(Routes.MapSample);
                     },
                     child: Container(
+                      alignment: AlignmentDirectional.center,
                       height: MediaQuery.sizeOf(context).height * 0.24,
                       width: MediaQuery.sizeOf(context).width,
                       decoration: BoxDecoration(
@@ -94,39 +100,9 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                           color: AppColors.green,
                         ),
                       ),
-                      child: Stack(
-                        children: [
-                          InkWell(
-                            onTap: () {},
-                            child: GoogleMap(
-                              initialCameraPosition: bloc.cameraPosition,
-                              compassEnabled: false,
-                              zoomControlsEnabled: false,
-                              mapToolbarEnabled: false,
-                              markers: {bloc.placeMarker},
-                              onTap: (latLang) {
-                                //context.pushNamed(Routes.MapSample);
-                                bloc.getAddressFromLatLang(latLang);
-                                bloc.placeMarker = Marker(
-                                  position: latLang,
-                                  markerId: const MarkerId(
-                                    'id',
-                                  ),
-                                  infoWindow: const InfoWindow(title: 'google'),
-                                );
-                                setState(() {});
-                              },
-                              onCameraIdle: () {},
-                              onMapCreated: (controller){
-                                bloc.setMapController(controller);
-                              },
-                              onCameraMove: (position) {
-                                print(position);
-                                bloc.cameraPosition = position;
-                              },
-                            ),
-                          ),
-                        ],
+                      child: Text(
+                        'open Map',
+                        style: getBoldStyle(),
                       ),
                     ),
                   ),
@@ -185,3 +161,51 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     );
   }
 }
+/*
+Stack(
+children: [
+*/
+/*              GoogleMap(
+                            initialCameraPosition: bloc.cameraPosition,
+                            compassEnabled: false,
+                            zoomControlsEnabled: false,
+                            mapToolbarEnabled: false,
+                            markers: {bloc.placeMarker},
+                            gestureRecognizers: <Factory<
+                                OneSequenceGestureRecognizer>>{
+                              Factory<OneSequenceGestureRecognizer>(
+                                  () => ScaleGestureRecognizer())
+                            },
+                            onTap: (latLang) {
+                              context.pushNamed(Routes.MapSample);
+                              bloc.getAddressFromLatLang(latLang).then((value) {
+                                setState(() {});
+                              });
+                              bloc.placeMarker = Marker(
+                                position: latLang,
+                                markerId: const MarkerId(
+                                  'id',
+                                ),
+                                infoWindow: const InfoWindow(title: 'google'),
+                              );
+                              setState(() {});
+                            },
+                            onMapCreated: (controller) {
+                              bloc.setMapController(controller);
+                            },
+                            */ /*
+*/
+/*onCameraIdle: () {
+                              bloc.cameraPosition = cameraPosition;
+                            },
+
+                            onCameraMove: (position) {
+                              print(position);
+                              bloc.cameraPosition = position;
+                            },*/ /*
+*/
+/*
+                          ),*/ /*
+
+],
+),*/

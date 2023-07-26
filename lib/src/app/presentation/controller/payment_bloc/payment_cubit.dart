@@ -15,12 +15,11 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   Future<void> getAuthToken() async {
     emit(GetAuthTokenLoadingState());
-
     try {
-      Response response = await apiConsumer.post(ApiConstant.getAuthToken,
-          body: {"api_key": ApiConstant.paymentApiKey});
+      Response response = await apiConsumer.post(ApiPaymentConstant.getAuthToken,
+          body: {"api_key": ApiPaymentConstant.paymentApiKey});
 
-      ApiConstant.paymentAuthToken = response.data['token'];
+      ApiPaymentConstant.paymentAuthToken = response.data['token'];
 
       emit(GetAuthTokenSuccessState());
     } catch (e) {
@@ -33,20 +32,22 @@ class PaymentCubit extends Cubit<PaymentState> {
   }) async {
     emit(GetOrderIdLoadingState());
     try {
-      Response response = await apiConsumer.post(ApiConstant.getOrderId, body: {
-        "auth_token": ApiConstant.paymentAuthToken,
+      print('getid');
+      Response response = await apiConsumer.post(ApiPaymentConstant.getOrderId, body: {
+        "auth_token": ApiPaymentConstant.paymentAuthToken,
         "delivery_needed": "false",
         "amount_cents": price,
         "currency": "EGP",
         "items": [],
       });
 
-      ApiConstant.paymentOrderId = response.data['id'].toString();
+
+      ApiPaymentConstant.paymentOrderId = response.data['id'].toString();
 
       await getPaymentRequest(
         price: price,
       );
-    } catch (e) {
+    } catch (e) {print(e.toString());
       emit(GetOrderIdErrorState());
     }
   }
@@ -56,11 +57,11 @@ class PaymentCubit extends Cubit<PaymentState> {
   }) async {
     try {
       Response response =
-          await apiConsumer.post(ApiConstant.getPaymentToken, body: {
-        "auth_token": ApiConstant.paymentAuthToken,
+          await apiConsumer.post(ApiPaymentConstant.getPaymentToken, body: {
+        "auth_token": ApiPaymentConstant.paymentAuthToken,
         "amount_cents": price,
         "expiration": 10000,
-        "order_id": ApiConstant.paymentOrderId,
+        "order_id": ApiPaymentConstant.paymentOrderId,
         "currency": "EGP",
         "billing_data": {
           "apartment": "NA",
@@ -77,11 +78,11 @@ class PaymentCubit extends Cubit<PaymentState> {
           "last_name": "Na",
           "state": "NA"
         },
-        "integration_id": ApiConstant.integrationIdCard,
+        "integration_id": ApiPaymentConstant.integrationIdCard,
         "lock_order_when_paid": "false"
       });
 
-      ApiConstant.finalTokenPayment = response.data['token'];
+      ApiPaymentConstant.finalTokenPayment = response.data['token'];
 
       emit(GetPaymentRequestSuccessState());
     } catch (e) {
@@ -112,13 +113,13 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(GetPaymentMobileWalletLoadingState());
 
     try {
-      Response response = await apiConsumer.post(ApiConstant.getPayment, body: {
+      Response response = await apiConsumer.post(ApiPaymentConstant.getPayment, body: {
         "source": {"identifier": "01010101010", "subtype": "WALLET"},
-        "payment_token": ApiConstant.finalTokenPayment
+        "payment_token": ApiPaymentConstant.finalTokenPayment
         // token obtained in step 3
       });
 
-      ApiConstant.mobileWalletIframe =
+      ApiPaymentConstant.mobileWalletIframe =
           response.data['iframe_redirection_url'].toString();
 
       emit(GetPaymentMobileWalletSuccessState());

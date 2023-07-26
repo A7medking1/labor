@@ -46,7 +46,7 @@ class _InputFieldBuildState extends State<InputFieldBuild> with Validator {
             ),
           ),
           //validator: (value) => validateEmail(value),
-          textInputType: TextInputType.emailAddress,
+          textInputType: TextInputType.number,
           suffixIcon: const Icon(Icons.phone),
           title: AppStrings.phone.tr(),
         ),

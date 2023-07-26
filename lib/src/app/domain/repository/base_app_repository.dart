@@ -7,6 +7,8 @@ import 'package:labour/src/app/domain/entity/comment.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
 import 'package:labour/src/app/domain/entity/location.dart';
 import 'package:labour/src/app/domain/entity/order.dart';
+import 'package:labour/src/app/domain/entity/place.dart';
+import 'package:labour/src/app/domain/entity/place_detail_entity.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/set_rating_to_company_useCase.dart';
@@ -41,4 +43,11 @@ abstract class BaseAppRepository {
       SetRatingToCompanyParameters parameters);
 
   Future<Either<Failure, void>> saveOrderToFireStore(OrderModel order);
+
+  Future<Either<Failure,List<PlaceEntity>>> getPlaceId(String place);
+
+  Future<Either<Failure,PlaceDetailEntity>> getPlaceDetails(String placeId);
+
+
+
 }

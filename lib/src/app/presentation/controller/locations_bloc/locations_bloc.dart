@@ -7,22 +7,32 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:labour/src/app/data/model/location_model.dart';
 import 'package:labour/src/app/domain/entity/location.dart';
+import 'package:labour/src/app/domain/entity/place.dart';
+import 'package:labour/src/app/domain/entity/place_detail_entity.dart';
 import 'package:labour/src/app/domain/use_cases/add_locations_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/delete_locations_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_locations_useCase.dart';
+import 'package:labour/src/app/domain/use_cases/get_place_details_useCase.dart';
+import 'package:labour/src/app/domain/use_cases/get_place_id_useCase.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
 import 'package:labour/src/core/use_case/base_use_case.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:rxdart/rxdart.dart';
 
 part 'locations_event.dart';
 
 part 'locations_state.dart';
+
+const _duration = Duration(milliseconds: 800);
 
 class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
   LocationsBloc(
     this.getLocationUseCase,
     this.addLocationUseCase,
     this.deleteLocationUseCase,
+    this.getPlaceIdUseCase,
+    this.getPlaceDetailsUseCase,
   ) : super(const LocationsState()) {
     on<GetLocationsEvent>(_getLocations);
     on<AddLocationEvent>(_addLocation);
@@ -30,11 +40,20 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
     on<GetLocationFromPrefsEvent>(_getLocationFromPrefs);
     on<GetCurrentLocationEvent>(_getCurrentLocation);
     on<UpdateMapLocationEvent>(_updateLocationMap);
+    on<GetPlaceIdEvent>(
+      _getPlacesEvent,
+      transformer: (event, mapper) {
+        return (event).debounceTime(_duration).flatMap(mapper);
+      },
+    );
+    on<GetPlaceDetailsEvent>(_getPlaceDetails);
   }
 
   final GetLocationUseCase getLocationUseCase;
   final AddLocationUseCase addLocationUseCase;
   final DeleteLocationUseCase deleteLocationUseCase;
+  final GetPlaceIdUseCase getPlaceIdUseCase;
+  final GetPlaceDetailsUseCase getPlaceDetailsUseCase;
 
   String currentLocation = '';
 
@@ -48,17 +67,35 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
 
   String building = '';
 
-  GoogleMapController? googleMapController;
-
-  setMapController(GoogleMapController controller){
-    googleMapController = controller;
-  }
-
+  FloatingSearchBarController? controller = FloatingSearchBarController();
 
   CameraPosition cameraPosition = const CameraPosition(
     target: LatLng(31.037933, 31.381523),
     zoom: 17,
   );
+
+  CameraPosition? goToSearchCameraPosition;
+
+  PlaceEntity? placeSuggestion;
+
+/*
+  Marker? searchMarker = const Marker(
+    position: LatLng(31.037933, 31.381523),
+    markerId: MarkerId(
+      '1',
+    ),
+    infoWindow: InfoWindow(title: 'google'),
+  );
+*/
+
+  void buildCameraNewPosition(LatLng latLng) {
+    goToSearchCameraPosition = CameraPosition(
+      bearing: 0.0,
+      tilt: 0.0,
+      target: latLng,
+      zoom: 17,
+    );
+  }
 
   Marker placeMarker = const Marker(
     position: LatLng(31.037933, 31.381523),
@@ -203,10 +240,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
 
   FutureOr<void> _updateLocationMap(
       UpdateMapLocationEvent event, Emitter<LocationsState> emit) async {
-    emit(state.copyWith(
-      updateState: RequestState.loading,
-    ));
-
     cameraPosition = CameraPosition(
       target: event.latLng,
       zoom: 17,
@@ -222,7 +255,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
 
     emit(
       state.copyWith(
-        updateState: RequestState.loaded,
         pickedLocation: LocationEntity(
           city: city,
           region: region,
@@ -230,6 +262,56 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
           building: building,
         ),
       ),
+    );
+  }
+
+  FutureOr<void> _getPlacesEvent(
+      GetPlaceIdEvent event, Emitter<LocationsState> emit) async {
+    emit(state.copyWith(searchReqState: RequestState.loading));
+
+    final result = await getPlaceIdUseCase(event.place);
+
+    result.fold(
+      (l) => emit(
+        state.copyWith(
+          searchReqState: RequestState.error,
+        ),
+      ),
+      (r) {
+        if (r.isEmpty) {
+          emit(state.copyWith(searchReqState: RequestState.empty));
+        } else {
+          emit(
+            state.copyWith(
+              searchReqState: RequestState.loaded,
+              places: r,
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  FutureOr<void> _getPlaceDetails(
+      GetPlaceDetailsEvent event, Emitter<LocationsState> emit) async {
+    emit(state.copyWith(placeDetailsReqState: RequestState.loading));
+
+    final result = await getPlaceDetailsUseCase(event.placeId);
+
+    result.fold(
+      (l) => emit(
+        state.copyWith(
+          placeDetailsReqState: RequestState.error,
+        ),
+      ),
+      (r) {
+        emit(
+          state.copyWith(
+            placeDetailsReqState: RequestState.loaded,
+            placeDetails: r,
+          ),
+        );
+      },
     );
   }
 }

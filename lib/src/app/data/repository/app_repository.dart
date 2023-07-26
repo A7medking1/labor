@@ -6,6 +6,8 @@ import 'package:labour/src/app/domain/entity/category.dart';
 import 'package:labour/src/app/domain/entity/comment.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
 import 'package:labour/src/app/domain/entity/location.dart';
+import 'package:labour/src/app/domain/entity/place.dart';
+import 'package:labour/src/app/domain/entity/place_detail_entity.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';
 import 'package:labour/src/app/domain/repository/base_app_repository.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
@@ -151,6 +153,28 @@ class AppRepository extends BaseAppRepository {
       return Right(result);
     } on FireException catch (e) {
       return Left(ServerFailure(e.message!));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<PlaceEntity>>> getPlaceId(String place) async {
+    try {
+      final result = await remoteAppDataSource.getPlaceId(place);
+
+      return Right(result);
+    } on FireException catch (failure) {
+      return Left(ServerFailure(failure.message!));
+    }
+  }
+
+  @override
+  Future<Either<Failure, PlaceDetailEntity>> getPlaceDetails(
+      String placeId) async {
+    try {
+      final result = await remoteAppDataSource.getPlaceDetails(placeId);
+      return Right(result);
+    } on FireException catch (failure) {
+      return Left(ServerFailure(failure.message!));
     }
   }
 }

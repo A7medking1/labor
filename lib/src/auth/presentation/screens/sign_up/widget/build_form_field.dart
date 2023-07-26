@@ -27,7 +27,6 @@ class _InputFieldBuildState extends State<InputFieldBuild> with Validator {
         CustomTextFormField(
           controller: bloc.userName,
           validator: (value) => validateName(value),
-          textInputType: TextInputType.name,
           title: AppStrings.fullName.tr(),
           suffixIcon: const Icon(Icons.person),
         ),
@@ -42,7 +41,9 @@ class _InputFieldBuildState extends State<InputFieldBuild> with Validator {
                 context: context,
                 countryListTheme: CountryListThemeData(
                   borderRadius: BorderRadius.zero,
-                  bottomSheetHeight: MediaQuery.sizeOf(context).height * 0.5,
+                  padding: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).viewInsets.bottom),
+                  bottomSheetHeight: MediaQuery.sizeOf(context).height * 0.8,
                 ),
                 onSelect: (value) {
                   setState(() {
@@ -57,6 +58,7 @@ class _InputFieldBuildState extends State<InputFieldBuild> with Validator {
             ),
           ),
           title: AppStrings.phone.tr(),
+          textInputType: TextInputType.number,
           suffixIcon: const Icon(Icons.phone),
         ),
       ],

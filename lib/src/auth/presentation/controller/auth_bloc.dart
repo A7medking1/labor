@@ -140,7 +140,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   FutureOr<void> _sendOtpToPhone(
       SendOtpToPhoneEvent event, Emitter<AuthState> emit) async {
-    print('+${country.phoneCode}${phone.text}');
+    print('+${country.phoneCode}${phone.text}'.trim());
     await sl<FirebaseAuth>().verifyPhoneNumber(
       phoneNumber: '+${country.phoneCode}${phone.text}',
       verificationCompleted: (PhoneAuthCredential credential) async {},

@@ -13,6 +13,8 @@ import 'package:labour/src/app/domain/use_cases/get_comments_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_company_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_current_user_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_locations_useCase.dart';
+import 'package:labour/src/app/domain/use_cases/get_place_details_useCase.dart';
+import 'package:labour/src/app/domain/use_cases/get_place_id_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_rating_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/get_services_useCase.dart';
 import 'package:labour/src/app/domain/use_cases/set_comment_to_company_useCase.dart';
@@ -73,7 +75,7 @@ class ServicesLocator {
     final fireStore = FirebaseFirestore.instance;
     sl.registerFactory(() => fireStore);
     sl.registerLazySingleton<BaseRemoteAppDataSource>(
-        () => AppRemoteDataSource(sl()));
+        () => AppRemoteDataSource(sl(), sl()));
     sl.registerLazySingleton<BaseAppRepository>(() => AppRepository(sl()));
     sl.registerLazySingleton(() => GetCategoryUseCase(sl()));
     sl.registerLazySingleton(() => GetCompanyUseCase(sl()));
@@ -87,13 +89,16 @@ class ServicesLocator {
     sl.registerLazySingleton(() => GetCurrentUserUseCase(sl()));
     sl.registerLazySingleton(() => SetRatingToCompanyUseCase(sl()));
     sl.registerLazySingleton(() => GetRatingUseCase(sl()));
+    sl.registerLazySingleton(() => GetPlaceIdUseCase(sl()));
+    sl.registerLazySingleton(() => GetPlaceDetailsUseCase(sl()));
 
     sl.registerFactory<CategoryBloc>(() => CategoryBloc(sl()));
     sl.registerFactory<CompanyBloc>(() => CompanyBloc(sl(), sl(), sl(), sl()));
     sl.registerFactory<HomeBloc>(() => HomeBloc(sl(), sl(), sl(), sl()));
     sl.registerFactory<StepCubit>(() => StepCubit());
     sl.registerFactory<ProfileBloc>(() => ProfileBloc(sl()));
-    sl.registerFactory<LocationsBloc>(() => LocationsBloc(sl(), sl(), sl()));
+    sl.registerFactory<LocationsBloc>(
+        () => LocationsBloc(sl(), sl(), sl(), sl(), sl()));
 
     sl.registerLazySingleton<Dio>(() => Dio());
 

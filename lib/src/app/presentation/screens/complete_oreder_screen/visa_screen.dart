@@ -115,7 +115,7 @@ class _VisaScreenState extends State<VisaScreen> {
           },
         ),
       )
-      ..loadRequest(Uri.parse(ApiConstant.visaUrl));
+      ..loadRequest(Uri.parse(ApiPaymentConstant.visaUrl));
 
     if (_controller!.platform is AndroidWebViewController) {
       AndroidWebViewController.enableDebugging(true);

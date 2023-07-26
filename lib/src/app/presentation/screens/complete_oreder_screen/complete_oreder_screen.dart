@@ -62,7 +62,10 @@ class CompleteOrderBody extends StatelessWidget {
           );
         }
         if (state is GetPaymentRequestSuccessState) {
+          OverlayLoadingProgress.stop();
           context.pushNamed(Routes.toggleScreen,extra: serviceEntity);
+        }
+       if (state is GetOrderIdErrorState) {
           OverlayLoadingProgress.stop();
         }
       },

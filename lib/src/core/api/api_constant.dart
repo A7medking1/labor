@@ -1,4 +1,4 @@
-class ApiConstant {
+class ApiPaymentConstant {
   static const baseUrl = 'https://accept.paymob.com/api';
 
   static const getAuthToken = '$baseUrl/api/auth/tokens';
@@ -24,4 +24,13 @@ class ApiConstant {
   static String refCode = '';
   static String finalTokenPayment = '';
   static String mobileWalletIframe = '';
+}
+
+class ApiMapConstant {
+  static const String apiKey = 'AIzaSyDjjZzMmPfqAB8xbfhXhr2yiEaJ8n5EiDg';
+
+  static const baseUrl = 'https://maps.googleapis.com/maps/api/place';
+
+  static const getPlaceId = '$baseUrl/autocomplete/json';
+  static const getPlaceDetails = '$baseUrl/details/json';
 }
