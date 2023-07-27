@@ -5,7 +5,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:labour/firebase_options.dart';
-import 'package:labour/observer.dart';
 import 'package:labour/src/app/presentation/controller/category_bloc/category_bloc.dart';
 import 'package:labour/src/app/presentation/controller/home_bloc/home_bloc.dart';
 import 'package:labour/src/app/presentation/controller/locations_bloc/locations_bloc.dart';
@@ -23,7 +22,7 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
 
- // Bloc.observer = MyBlocObserver();
+  // Bloc.observer = MyBlocObserver();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,

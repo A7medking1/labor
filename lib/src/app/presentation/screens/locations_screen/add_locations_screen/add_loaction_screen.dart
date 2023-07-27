@@ -22,14 +22,6 @@ class AddLocationScreen extends StatefulWidget {
 }
 
 class _AddLocationScreenState extends State<AddLocationScreen> {
-  final TextEditingController cityController = TextEditingController();
-
-  final TextEditingController regionController = TextEditingController();
-
-  final TextEditingController streetController = TextEditingController();
-
-  final TextEditingController buildingController = TextEditingController();
-
   @override
   void initState() {
     // TODO: implement initState
@@ -43,10 +35,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
 
   @override
   void dispose() {
-    cityController.dispose();
-    regionController.dispose();
-    buildingController.dispose();
-    streetController.dispose();
     super.dispose();
   }
 
@@ -70,12 +58,6 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
       builder: (context, state) {
         print(AddLocationScreen);
         final bloc = context.read<LocationsBloc>();
-
-        cityController.text = bloc.city;
-        streetController.text = bloc.street;
-        buildingController.text = bloc.building;
-        regionController.text = bloc.region;
-        print('test');
 
         return Scaffold(
           appBar: AppBar(
@@ -110,28 +92,28 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
                     height: 30,
                   ),
                   CustomTextFormField(
-                    controller: cityController,
+                    controller: bloc.cityController,
                     title: AppStrings.city.tr(),
                   ),
                   SizedBox(
                     height: 15.h,
                   ),
                   CustomTextFormField(
-                    controller: regionController,
+                    controller: bloc.regionController,
                     title: AppStrings.region.tr(),
                   ),
                   SizedBox(
                     height: 15.h,
                   ),
                   CustomTextFormField(
-                    controller: streetController,
+                    controller: bloc.streetController,
                     title: AppStrings.street.tr(),
                   ),
                   SizedBox(
                     height: 15.h,
                   ),
                   CustomTextFormField(
-                    controller: buildingController,
+                    controller: bloc.buildingController,
                     title: AppStrings.building.tr(),
                   ),
                 ],
@@ -143,10 +125,10 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
             child: CustomButton(
               onTap: () {
                 LocationsModel location = LocationsModel(
-                  city: cityController.text,
-                  region: regionController.text,
-                  street: streetController.text,
-                  building: buildingController.text,
+                  city: bloc.cityController.text,
+                  region: bloc.regionController.text,
+                  street: bloc.streetController.text,
+                  building: bloc.buildingController.text,
                 );
                 context.read<LocationsBloc>().add(AddLocationEvent(location));
                 //context.pop();
@@ -161,51 +143,3 @@ class _AddLocationScreenState extends State<AddLocationScreen> {
     );
   }
 }
-/*
-Stack(
-children: [
-*/
-/*              GoogleMap(
-                            initialCameraPosition: bloc.cameraPosition,
-                            compassEnabled: false,
-                            zoomControlsEnabled: false,
-                            mapToolbarEnabled: false,
-                            markers: {bloc.placeMarker},
-                            gestureRecognizers: <Factory<
-                                OneSequenceGestureRecognizer>>{
-                              Factory<OneSequenceGestureRecognizer>(
-                                  () => ScaleGestureRecognizer())
-                            },
-                            onTap: (latLang) {
-                              context.pushNamed(Routes.MapSample);
-                              bloc.getAddressFromLatLang(latLang).then((value) {
-                                setState(() {});
-                              });
-                              bloc.placeMarker = Marker(
-                                position: latLang,
-                                markerId: const MarkerId(
-                                  'id',
-                                ),
-                                infoWindow: const InfoWindow(title: 'google'),
-                              );
-                              setState(() {});
-                            },
-                            onMapCreated: (controller) {
-                              bloc.setMapController(controller);
-                            },
-                            */ /*
-*/
-/*onCameraIdle: () {
-                              bloc.cameraPosition = cameraPosition;
-                            },
-
-                            onCameraMove: (position) {
-                              print(position);
-                              bloc.cameraPosition = position;
-                            },*/ /*
-*/
-/*
-                          ),*/ /*
-
-],
-),*/

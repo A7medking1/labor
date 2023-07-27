@@ -57,13 +57,12 @@ class MapSampleState extends State<MapSample> {
               mapController.complete(controller);
             },
             onCameraMove: (position) {
-              print(position);
               bloc.cameraPosition = position;
             },
             initialCameraPosition: bloc.cameraPosition,
             onTap: (latLang) {
-              print(latLang);
               pickLatLong = latLang;
+              bloc.add(GetAddressFromLatLangEvent(pickLatLong!));
               bloc.placeMarker = Marker(
                 markerId: const MarkerId('id'),
                 position: latLang,
@@ -74,12 +73,6 @@ class MapSampleState extends State<MapSample> {
           if (isSearch) buildFloatingSearchBar(),
         ],
       ),
-      /* floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
-        label: const Icon(
-          Icons.location_on_rounded,
-        ),
-      ),*/
       bottomNavigationBar: Padding(
         padding: const EdgeInsetsDirectional.only(
             bottom: 30.0, end: 30, start: 30, top: 20),
@@ -97,54 +90,50 @@ class MapSampleState extends State<MapSample> {
     final isPortrait =
         MediaQuery.of(context).orientation == Orientation.portrait;
 
-    return AnimatedContainer(
-      curve: Curves.easeInOut,
-      duration: const Duration(milliseconds: 500),
-      child: FloatingSearchBar(
-        hint: 'Search...',
-        controller: context.read<LocationsBloc>().controller,
-        scrollPadding: const EdgeInsets.only(top: 0, bottom: 0),
-        transitionDuration: const Duration(milliseconds: 800),
-        automaticallyImplyBackButton: false,
-        transitionCurve: Curves.easeInOut,
-        physics: const BouncingScrollPhysics(),
-        axisAlignment: isPortrait ? 0.0 : -1.0,
-        openAxisAlignment: 0.0,
-        width: isPortrait ? 600 : 500,
-        height: 70,
-        debounceDelay: const Duration(milliseconds: 500),
-        onQueryChanged: (query) {
-          getPlacesSuggestions(query);
-        },
-        transition: CircularFloatingSearchBarTransition(),
-        actions: [
-          FloatingSearchBarAction(
-            showIfOpened: false,
-            child: CircularButton(
-              icon: const Icon(Icons.place),
-              onPressed: () {},
+    return FloatingSearchBar(
+      hint: 'Search...',
+      controller: context.read<LocationsBloc>().controller,
+      scrollPadding: const EdgeInsets.only(top: 0, bottom: 0),
+      transitionDuration: const Duration(milliseconds: 800),
+      automaticallyImplyBackButton: false,
+      transitionCurve: Curves.easeInOut,
+      physics: const BouncingScrollPhysics(),
+      axisAlignment: isPortrait ? 0.0 : -1.0,
+      openAxisAlignment: 0.0,
+      width: isPortrait ? 600 : 500,
+      height: 70,
+      debounceDelay: const Duration(milliseconds: 500),
+      onQueryChanged: (query) {
+        getPlacesSuggestions(query);
+      },
+      transition: CircularFloatingSearchBarTransition(),
+      actions: [
+        FloatingSearchBarAction(
+          showIfOpened: false,
+          child: CircularButton(
+            icon: const Icon(Icons.place),
+            onPressed: () {},
+          ),
+        ),
+        FloatingSearchBarAction.searchToClear(
+          showIfClosed: false,
+        ),
+      ],
+      builder: (context, transition) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Material(
+            color: Colors.white,
+            elevation: 4.0,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                placeListView(),
+              ],
             ),
           ),
-          FloatingSearchBarAction.searchToClear(
-            showIfClosed: false,
-          ),
-        ],
-        builder: (context, transition) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Material(
-              color: Colors.white,
-              elevation: 4.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  placeListView(),
-                ],
-              ),
-            ),
-          );
-        },
-      ),
+        );
+      },
     );
   }
 
@@ -220,8 +209,8 @@ class MapSampleState extends State<MapSample> {
       icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
     );
     pickLatLong = bloc.goToSearchCameraPosition!.target;
-    bloc.getAddressFromLatLang(pickLatLong!);
-
+    bloc.add(GetAddressFromLatLangEvent(pickLatLong!));
     setState(() {});
+
   }
 }

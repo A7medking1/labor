@@ -10,6 +10,7 @@ import 'package:labour/src/app/presentation/screens/create_service_screen/create
 import 'package:labour/src/app/presentation/screens/locations_screen/add_locations_screen/add_loaction_screen.dart';
 import 'package:labour/src/app/presentation/screens/locations_screen/locations_screen/locations_screen.dart';
 import 'package:labour/src/app/presentation/screens/locations_screen/map.dart';
+import 'package:labour/src/app/presentation/screens/my_wallet_screen/my_wallet_screen.dart';
 import 'package:labour/src/app/presentation/screens/profile_screen/edit_screen/edit_screen.dart';
 import 'package:labour/src/auth/presentation/screens/login/login_screen.dart';
 import 'package:labour/src/auth/presentation/screens/sign_up/sign_up_screen.dart';
@@ -38,6 +39,7 @@ class Routes {
   static const toggleScreen = 'toggleScreen';
   static const visaScreen = 'visaScreen';
   static const MapSample = 'MapSample';
+  static const myWallet = 'myWallet';
 }
 
 class RouterPath {
@@ -59,6 +61,8 @@ class RouterPath {
   static const toggleScreen = '/toggleScreen';
   static const visaScreen = '/visaScreen';
   static const MapSample = '/MapSample';
+  static const myWallet = '/myWallet';
+
 
 }
 
@@ -119,6 +123,11 @@ class AppRouter {
         name: Routes.MapSample,
         path: RouterPath.MapSample,
         builder: (context, state) => const MapSample(),
+      ),
+      GoRoute(
+        name: Routes.myWallet,
+        path: RouterPath.myWallet,
+        builder: (context, state) => const MyWalletScreen(),
       ),
      /* GoRoute(
         name: Routes.toggleScreen,

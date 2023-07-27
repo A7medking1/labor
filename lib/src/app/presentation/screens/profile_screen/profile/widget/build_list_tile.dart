@@ -84,6 +84,15 @@ class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
               height: 20.h,
             ),
             CustomListTileWidget(
+              title: AppStrings.my_wallet.tr(),
+              body: AppStrings.my_wallet.tr(),
+              leadingIcon: AppAssets.wallet,
+              onTap: () => context.pushNamed(Routes.myWallet),
+            ),
+            SizedBox(
+              height: 20.h,
+            ),
+            CustomListTileWidget(
               title: AppStrings.contactUs.tr(),
               body: AppStrings.forMoreInformation.tr(),
               leadingIcon: AppAssets.calling,

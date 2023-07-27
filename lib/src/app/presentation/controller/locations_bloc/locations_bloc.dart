@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -24,7 +26,7 @@ part 'locations_event.dart';
 
 part 'locations_state.dart';
 
-const _duration = Duration(milliseconds: 800);
+const _duration = Duration(milliseconds: 500);
 
 class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
   LocationsBloc(
@@ -39,7 +41,7 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
     on<DeleteLocationEvent>(_delLocation);
     on<GetLocationFromPrefsEvent>(_getLocationFromPrefs);
     on<GetCurrentLocationEvent>(_getCurrentLocation);
-    on<UpdateMapLocationEvent>(_updateLocationMap);
+    on<GetAddressFromLatLangEvent>(_getAddressFromLatLang);
     on<GetPlaceIdEvent>(
       _getPlacesEvent,
       transformer: (event, mapper) {
@@ -57,15 +59,13 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
 
   String currentLocation = '';
 
-  String address = '';
+  final TextEditingController cityController = TextEditingController();
 
-  String city = '';
+  final TextEditingController regionController = TextEditingController();
 
-  String street = '';
+  final TextEditingController streetController = TextEditingController();
 
-  String region = '';
-
-  String building = '';
+  final TextEditingController buildingController = TextEditingController();
 
   FloatingSearchBarController? controller = FloatingSearchBarController();
 
@@ -121,7 +121,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
         ),
       ),
       (r) {
-        print(r.length);
         if (r.isEmpty) {
           emit(
             state.copyWith(
@@ -135,7 +134,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
               locations: r,
             ),
           );
-          print('state.locations.length ${state.locations.length}');
         }
       },
     );
@@ -160,7 +158,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
         emit(state.copyWith(addLocReqState: RequestState.loaded));
       },
     );
-    //add(GetLocationsEvent());
   }
 
   FutureOr<void> _delLocation(
@@ -194,22 +191,6 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
     emit(state.copyWith(location: prefs, requestState: RequestState.loaded));
   }
 
-  Future<void> getAddressFromLatLang(LatLng latLng) async {
-    List<Placemark> placeMark = await placemarkFromCoordinates(
-        latLng.latitude, latLng.longitude,
-        localeIdentifier: 'en');
-    print(placeMark);
-    Placemark place = placeMark[0];
-    /* address =
-        '${place.street} -- ${place.subLocality} -- ${place.locality} -- ${place.country}';*/
-    city = place.administrativeArea ?? '';
-    street = place.street ?? '';
-    region = place.locality ?? '';
-    building = place.thoroughfare ?? '';
-
-    print(address);
-  }
-
   FutureOr<void> _getCurrentLocation(
       GetCurrentLocationEvent event, Emitter<LocationsState> emit) async {
     bool serviceEnabled;
@@ -220,7 +201,9 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
       return await Future.error('Location services are disabled.');
     }
     permission = await Geolocator.checkPermission();
-    print(permission);
+    if (kDebugMode) {
+      print(permission);
+    }
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
@@ -234,35 +217,8 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
 
     Geolocator.getCurrentPosition().then((value) {
       currentLatLang = LatLng(value.latitude, value.longitude);
-      getAddressFromLatLang(LatLng(value.latitude, value.longitude));
+      add(GetAddressFromLatLangEvent(LatLng(value.latitude, value.longitude)));
     });
-  }
-
-  FutureOr<void> _updateLocationMap(
-      UpdateMapLocationEvent event, Emitter<LocationsState> emit) async {
-    cameraPosition = CameraPosition(
-      target: event.latLng,
-      zoom: 17,
-    );
-
-    placeMarker = Marker(
-      position: event.latLng,
-      markerId: const MarkerId(
-        'id',
-      ),
-      infoWindow: const InfoWindow(title: 'google'),
-    );
-
-    emit(
-      state.copyWith(
-        pickedLocation: LocationEntity(
-          city: city,
-          region: region,
-          street: street,
-          building: building,
-        ),
-      ),
-    );
   }
 
   FutureOr<void> _getPlacesEvent(
@@ -313,5 +269,36 @@ class LocationsBloc extends Bloc<LocationsEvent, LocationsState> {
         );
       },
     );
+  }
+
+  FutureOr<void> _getAddressFromLatLang(
+      GetAddressFromLatLangEvent event, Emitter<LocationsState> emit) async {
+    List<Placemark> placeMark = await placemarkFromCoordinates(
+        event.latLng.latitude, event.latLng.longitude,
+        localeIdentifier: 'en');
+    if (kDebugMode) {
+      print(placeMark);
+    }
+    Placemark place = placeMark[0];
+    String city = place.administrativeArea ?? '';
+    String street = place.street ?? '';
+    String region = place.locality ?? '';
+    String building = place.thoroughfare ?? '';
+
+    emit(
+      state.copyWith(
+        location: LocationEntity(
+          city: city,
+          region: region,
+          street: street,
+          building: building,
+        ),
+      ),
+    );
+
+    cityController.text = city;
+    streetController.text = street;
+    buildingController.text = building;
+    regionController.text = region;
   }
 }

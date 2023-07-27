@@ -29,6 +29,7 @@ class AppAssets {
    static const String sun = '$_svg/sun.svg';
    static const String night = '$_svg/night.svg';
    static const String s_empty = '$_svg/s_empty.svg';
+   static const String wallet = '$_svg/wallet.svg';
 
 
 

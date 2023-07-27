@@ -27,11 +27,7 @@ class DeleteLocationEvent extends LocationsEvent {
 
 class GetCurrentLocationEvent extends LocationsEvent {}
 
-class UpdateMapLocationEvent extends LocationsEvent {
-  final LatLng latLng;
 
-  const UpdateMapLocationEvent(this.latLng);
-}
 
 class GetPlaceIdEvent extends LocationsEvent {
   final String place;
@@ -44,4 +40,8 @@ class GetPlaceDetailsEvent extends LocationsEvent {
   final String placeId;
 
   const GetPlaceDetailsEvent(this.placeId);
+}class GetAddressFromLatLangEvent extends LocationsEvent {
+  final LatLng latLng;
+
+  const GetAddressFromLatLangEvent(this.latLng);
 }
