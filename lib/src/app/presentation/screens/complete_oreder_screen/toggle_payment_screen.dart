@@ -20,10 +20,22 @@ class ToggleScreen extends StatelessWidget {
         if (state is GetPaymentMobileWalletLoadingState) {
           OverlayLoadingProgress.start(context);
         }
-        if (state is GetPaymentMobileWalletSuccessState) {
-         // context.push(MobileWalletScreen());
+
+
+
+        if(state is GetPaymentMobileWalletLoadingState){
+          OverlayLoadingProgress.start(context);
+        }
+
+        if(state is GetPaymentMobileWalletSuccessState){
+          context.pushNamed(Routes.MobileWalletScreen,extra: serviceEntity);
           OverlayLoadingProgress.stop();
         }
+
+
+
+
+
       },
       builder: (context, state) {
         PaymentCubit cubit = PaymentCubit.get(context);

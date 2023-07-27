@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:labour/src/app/domain/entity/company.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';
 import 'package:labour/src/app/presentation/screens/complete_oreder_screen/complete_oreder_screen.dart';
+import 'package:labour/src/app/presentation/screens/complete_oreder_screen/mobile_wallet_screen.dart';
 import 'package:labour/src/app/presentation/screens/complete_oreder_screen/toggle_payment_screen.dart';
 import 'package:labour/src/app/presentation/screens/complete_oreder_screen/visa_screen.dart';
 import 'package:labour/src/app/presentation/screens/compony_desc_screen/company_screen.dart';
@@ -38,6 +39,7 @@ class Routes {
   static const completeOrder = 'completeOrder';
   static const toggleScreen = 'toggleScreen';
   static const visaScreen = 'visaScreen';
+  static const MobileWalletScreen = 'MobileWalletScreen';
   static const MapSample = 'MapSample';
   static const myWallet = 'myWallet';
 }
@@ -60,6 +62,8 @@ class RouterPath {
   static const completeOrder = '/completeOrder';
   static const toggleScreen = '/toggleScreen';
   static const visaScreen = '/visaScreen';
+  static const MobileWalletScreen = '/MobileWalletScreen';
+
   static const MapSample = '/MapSample';
   static const myWallet = '/myWallet';
 
@@ -138,6 +142,13 @@ class AppRouter {
         name: Routes.visaScreen,
         path: RouterPath.visaScreen,
         builder: (context, state) =>  VisaScreen(
+          serviceEntity: state.extra as ServiceEntity,
+        ),
+      ),
+      GoRoute(
+        name: Routes.MobileWalletScreen,
+        path: RouterPath.MobileWalletScreen,
+        builder: (context, state) =>  MobileWalletScreen(
           serviceEntity: state.extra as ServiceEntity,
         ),
       ),

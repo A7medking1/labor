@@ -63,9 +63,9 @@ class CompleteOrderBody extends StatelessWidget {
         }
         if (state is GetPaymentRequestSuccessState) {
           OverlayLoadingProgress.stop();
-          context.pushNamed(Routes.toggleScreen,extra: serviceEntity);
+          context.pushNamed(Routes.toggleScreen, extra: serviceEntity);
         }
-       if (state is GetOrderIdErrorState) {
+        if (state is GetOrderIdErrorState) {
           OverlayLoadingProgress.stop();
         }
       },
@@ -83,10 +83,7 @@ class CompleteOrderBody extends StatelessWidget {
                 children: [
                   Text(
                     AppStrings.my_order_details.tr(),
-                    style: Theme
-                        .of(context)
-                        .textTheme
-                        .titleMedium,
+                    style: Theme.of(context).textTheme.titleMedium,
                   ),
                   const SizedBox(
                     height: 20,
@@ -100,7 +97,10 @@ class CompleteOrderBody extends StatelessWidget {
                   ),
                   CustomButton(
                     onTap: () {
-                      PaymentCubit.get(context).getOrderId(price: (totalPrice(serviceEntity.company.price) * 100).toString() );
+                      PaymentCubit.get(context).getOrderId(
+                        price: (totalPrice(serviceEntity.company.price) * 100)
+                            .toString(),
+                      );
                     },
                     text: AppStrings.pay.tr(),
                   ),
@@ -113,6 +113,7 @@ class CompleteOrderBody extends StatelessWidget {
     );
   }
 }
+
 double calculateTax(int price) {
   return (price * 0.05);
 }
@@ -120,6 +121,7 @@ double calculateTax(int price) {
 double totalPrice(int price) {
   return calculateTax(price) + price;
 }
+
 class PriceCouponsNotesOrder extends StatelessWidget {
   final ServiceEntity service;
 
@@ -127,8 +129,6 @@ class PriceCouponsNotesOrder extends StatelessWidget {
     super.key,
     required this.service,
   });
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -189,8 +189,7 @@ class PriceCouponsNotesOrder extends StatelessWidget {
         ),
         PriceInfoRow(
           title: AppStrings.total_price.tr(),
-          body: totalPrice(service.company.price)
-              .toString(),
+          body: totalPrice(service.company.price).toString(),
         ),
       ],
     );
@@ -244,7 +243,8 @@ class OrderDetails extends StatelessWidget {
           children: [
             RowInfoOrderWidget(
               title: AppStrings.name_of_order.tr(),
-              body: stringLang(serviceEntity.serviceName,serviceEntity.serviceNameAr),
+              body: stringLang(
+                  serviceEntity.serviceName, serviceEntity.serviceNameAr),
             ),
             RowInfoOrderWidget(
               title: AppStrings.date_of_order.tr(),
@@ -260,7 +260,8 @@ class OrderDetails extends StatelessWidget {
             ),
             RowInfoOrderWidget(
               title: AppStrings.company.tr(),
-              body: stringLang(serviceEntity.company.name, serviceEntity.company.nameAr),
+              body: stringLang(
+                  serviceEntity.company.name, serviceEntity.company.nameAr),
             ),
           ],
         ),
@@ -282,13 +283,9 @@ class OrderDetails extends StatelessWidget {
                 ),
                 child: Text(
                   serviceEntity.serviceStatus.tr(),
-                  style: Theme
-                      .of(context)
-                      .textTheme
-                      .titleSmall!
-                      .copyWith(
-                    color: Colors.white,
-                  ),
+                  style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                        color: Colors.white,
+                      ),
                 ),
               ),
             ),

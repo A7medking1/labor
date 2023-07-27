@@ -16,7 +16,8 @@ class PaymentCubit extends Cubit<PaymentState> {
   Future<void> getAuthToken() async {
     emit(GetAuthTokenLoadingState());
     try {
-      Response response = await apiConsumer.post(ApiPaymentConstant.getAuthToken,
+      Response response = await apiConsumer.post(
+          ApiPaymentConstant.getAuthToken,
           body: {"api_key": ApiPaymentConstant.paymentApiKey});
 
       ApiPaymentConstant.paymentAuthToken = response.data['token'];
@@ -33,7 +34,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(GetOrderIdLoadingState());
     try {
       print('getid');
-      Response response = await apiConsumer.post(ApiPaymentConstant.getOrderId, body: {
+      Response response =
+          await apiConsumer.post(ApiPaymentConstant.getOrderId, body: {
         "auth_token": ApiPaymentConstant.paymentAuthToken,
         "delivery_needed": "false",
         "amount_cents": price,
@@ -41,13 +43,13 @@ class PaymentCubit extends Cubit<PaymentState> {
         "items": [],
       });
 
-
       ApiPaymentConstant.paymentOrderId = response.data['id'].toString();
 
       await getPaymentRequest(
         price: price,
       );
-    } catch (e) {print(e.toString());
+    } catch (e) {
+      print(e.toString());
       emit(GetOrderIdErrorState());
     }
   }
@@ -113,7 +115,8 @@ class PaymentCubit extends Cubit<PaymentState> {
     emit(GetPaymentMobileWalletLoadingState());
 
     try {
-      Response response = await apiConsumer.post(ApiPaymentConstant.getPayment, body: {
+      Response response =
+          await apiConsumer.post(ApiPaymentConstant.getPayment, body: {
         "source": {"identifier": "01010101010", "subtype": "WALLET"},
         "payment_token": ApiPaymentConstant.finalTokenPayment
         // token obtained in step 3
@@ -122,6 +125,7 @@ class PaymentCubit extends Cubit<PaymentState> {
       ApiPaymentConstant.mobileWalletIframe =
           response.data['iframe_redirection_url'].toString();
 
+      print(ApiPaymentConstant.mobileWalletIframe);
       emit(GetPaymentMobileWalletSuccessState());
     } catch (e) {
       emit(GetPaymentMobileWalletErrorState());

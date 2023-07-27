@@ -31,7 +31,7 @@ class _InputFieldBuildState extends State<InputFieldBuild> with Validator {
                 context: context,
                 countryListTheme: CountryListThemeData(
                   borderRadius: BorderRadius.zero,
-                  bottomSheetHeight: MediaQuery.sizeOf(context).height * 0.5,
+                  bottomSheetHeight: MediaQuery.sizeOf(context).height * 0.8,
                 ),
                 onSelect: (value) {
                   setState(() {
