@@ -13,7 +13,7 @@ import 'package:labour/src/app/presentation/controller/profile_bloc/profile_bloc
 import 'package:labour/src/auth/presentation/controller/auth_bloc.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
 import 'package:labour/src/core/resources/app_theme.dart';
-import 'package:labour/src/core/resources/language_manager.dart';
+import 'package:labour/src/core/resources/language_manager.dart'; 
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
 

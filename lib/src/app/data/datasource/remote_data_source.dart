@@ -256,27 +256,16 @@ class AppRemoteDataSource extends BaseRemoteAppDataSource {
           .collection('rate');
 
       final data = await coll.get();
-
-/*
-      double result =
-          data.docs.map((m) => m['rate']).reduce((a, b) => a + b) / data.size;
-*/
-
       double sum = 0;
 
-      data.docs.forEach((element) {
-        // print('rate ${element.data()['rate']}' );
+      for (var element in data.docs) {
         sum += element.data()['rate'];
-      });
+      }
 
       if (sum == 0) {
         return 0.0;
       }
-
       double average = sum / data.size;
-
-      print(average.toStringAsFixed(1));
-      // print(double.parse(result.toStringAsFixed(1)));
       return double.parse(average.toStringAsFixed(1));
     } on FirebaseException catch (e) {
       throw FireException(e.message);

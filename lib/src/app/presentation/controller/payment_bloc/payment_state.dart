@@ -25,10 +25,6 @@ class GetPaymentRequestSuccessState extends PaymentState {}
 class GetPaymentRequestErrorState extends PaymentState {}
 
 
-class GetPaymentRedCodeLoadingState extends PaymentState {}
-class GetPaymentRedCodeSuccessState extends PaymentState {}
-class GetPaymentRedCodeErrorState extends PaymentState {}
-
 
 class GetPaymentMobileWalletLoadingState extends PaymentState {}
 class GetPaymentMobileWalletSuccessState extends PaymentState {}

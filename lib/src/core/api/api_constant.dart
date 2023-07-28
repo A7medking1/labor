@@ -13,14 +13,14 @@ class ApiPaymentConstant {
   static String visaUrl =
       '$baseUrl/acceptance/iframes/744284?payment_token=$finalTokenPayment';
 
-  /// kiosk 4011185
   /// online card 3678430
   /// mobile wallet 3706992
 
   ///
   static String paymentAuthToken = '';
   static String paymentOrderId = '';
-  static int integrationIdCard = 3678430;
+  static const int integrationIdCard = 3678430;
+  static const int integrationIdMobileWallet = 3706992;
   static String refCode = '';
   static String finalTokenPayment = '';
   static String mobileWalletIframe = '';

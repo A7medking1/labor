@@ -45,9 +45,11 @@ class PaymentCubit extends Cubit<PaymentState> {
 
       ApiPaymentConstant.paymentOrderId = response.data['id'].toString();
 
-      await getPaymentRequest(
+      /* await getPaymentRequest(
         price: price,
-      );
+      );*/
+
+      emit(GetOrderIdSuccessState());
     } catch (e) {
       print(e.toString());
       emit(GetOrderIdErrorState());
@@ -56,7 +58,10 @@ class PaymentCubit extends Cubit<PaymentState> {
 
   Future<void> getPaymentRequest({
     required String price,
+    required int integrationId,
   }) async {
+    emit(GetPaymentRequestLoadingState());
+
     try {
       Response response =
           await apiConsumer.post(ApiPaymentConstant.getPaymentToken, body: {
@@ -80,7 +85,7 @@ class PaymentCubit extends Cubit<PaymentState> {
           "last_name": "Na",
           "state": "NA"
         },
-        "integration_id": ApiPaymentConstant.integrationIdCard,
+        "integration_id": integrationId,
         "lock_order_when_paid": "false"
       });
 
@@ -92,25 +97,6 @@ class PaymentCubit extends Cubit<PaymentState> {
     }
   }
 
-/*
-  Future<void> getRefCode() async {
-    emit(GetPaymentRedCodeLoadingState());
-
-    try {
-      Response response = await apiConsumer.post(ApiConstant.getPayment, body: {
-        "source": {"identifier": "AGGREGATOR", "subtype": "AGGREGATOR"},
-        "payment_token": ApiConstant.finalTokenPayment,
-      });
-
-      ApiConstant.refCode = response.data['id'].toString();
-
-      emit(GetPaymentRedCodeSuccessState());
-    } catch (e) {
-      emit(GetPaymentRedCodeErrorState());
-    }
-  }
-*/
-
   Future<void> mobileWalletPayment() async {
     emit(GetPaymentMobileWalletLoadingState());
 
@@ -119,13 +105,11 @@ class PaymentCubit extends Cubit<PaymentState> {
           await apiConsumer.post(ApiPaymentConstant.getPayment, body: {
         "source": {"identifier": "01010101010", "subtype": "WALLET"},
         "payment_token": ApiPaymentConstant.finalTokenPayment
-        // token obtained in step 3
       });
 
       ApiPaymentConstant.mobileWalletIframe =
           response.data['iframe_redirection_url'].toString();
 
-      print(ApiPaymentConstant.mobileWalletIframe);
       emit(GetPaymentMobileWalletSuccessState());
     } catch (e) {
       emit(GetPaymentMobileWalletErrorState());

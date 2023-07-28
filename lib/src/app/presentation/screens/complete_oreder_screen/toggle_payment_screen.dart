@@ -3,15 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:labour/src/app/domain/entity/service_entity.dart';
 import 'package:labour/src/app/presentation/controller/payment_bloc/payment_cubit.dart';
+import 'package:labour/src/app/presentation/screens/complete_oreder_screen/complete_oreder_screen.dart';
+import 'package:labour/src/core/api/api_constant.dart';
 import 'package:labour/src/core/presentation/widget/cached_image_network.dart';
 import 'package:labour/src/core/presentation/widget/custom_loading.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 
-
 class ToggleScreen extends StatelessWidget {
-  final ServiceEntity serviceEntity ;
+  final ServiceEntity serviceEntity;
 
-  const ToggleScreen({Key? key,required this.serviceEntity}) : super(key: key);
+  const ToggleScreen({Key? key, required this.serviceEntity}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -21,24 +22,19 @@ class ToggleScreen extends StatelessWidget {
           OverlayLoadingProgress.start(context);
         }
 
-
-
-        if(state is GetPaymentMobileWalletLoadingState){
+        if (state is GetPaymentRequestLoadingState) {
           OverlayLoadingProgress.start(context);
         }
 
-        if(state is GetPaymentMobileWalletSuccessState){
-          context.pushNamed(Routes.MobileWalletScreen,extra: serviceEntity);
+        if (state is GetPaymentMobileWalletSuccessState) {
+          context.pushNamed(Routes.MobileWalletScreen, extra: serviceEntity);
           OverlayLoadingProgress.stop();
         }
-
-
-
-
-
       },
       builder: (context, state) {
         PaymentCubit cubit = PaymentCubit.get(context);
+        String price =
+            (totalPrice(serviceEntity.company.price) * 100).toString();
         return Scaffold(
           appBar: AppBar(),
           body: SafeArea(
@@ -49,8 +45,17 @@ class ToggleScreen extends StatelessWidget {
                 children: [
                   ChoosePayment(
                     text: 'payment with visa',
-                    onTap: () {
-                      context.pushNamed(Routes.visaScreen,extra: serviceEntity);
+                    onTap: () async {
+                      await cubit
+                          .getPaymentRequest(
+                        price: price,
+                        integrationId: ApiPaymentConstant.integrationIdCard,
+                      )
+                          .then((value) {
+                        OverlayLoadingProgress.stop();
+                        context.pushNamed(Routes.visaScreen,
+                            extra: serviceEntity);
+                      });
                     },
                     image: visaImage,
                   ),
@@ -59,7 +64,16 @@ class ToggleScreen extends StatelessWidget {
                   ChoosePayment(
                     text: 'payment with mobile wallet',
                     onTap: () {
-                      cubit.mobileWalletPayment();
+                      cubit
+                          .getPaymentRequest(
+                              price: price,
+                              integrationId:
+                                  ApiPaymentConstant.integrationIdMobileWallet)
+                          .then(
+                        (value) {
+                          cubit.mobileWalletPayment();
+                        },
+                      );
                     },
                     image: wallet,
                   ),
@@ -116,12 +130,11 @@ class ChoosePayment extends StatelessWidget {
   }
 }
 
- const String refCodeImage =
+const String refCodeImage =
     "https://cdn-icons-png.flaticon.com/128/4090/4090458.png";
 
- const String visaImage =
+const String visaImage =
     "https://cdn-icons-png.flaticon.com/128/349/349221.png";
 
-
- const String wallet =
+const String wallet =
     "https://th.bing.com/th/id/R.4a264daff2b601793535bd845574e8e8?rik=Rd%2bH8mBLY6G35g&pid=ImgRaw&r=0";
