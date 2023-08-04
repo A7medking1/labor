@@ -4,6 +4,7 @@ import 'package:bloc/bloc.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -185,6 +186,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       } else {
         print('isNewUser ${res.additionalUserInfo!.isNewUser}');
       }
+      FirebaseMessaging.instance.subscribeToTopic('users');
+      FirebaseMessaging.instance.subscribeToTopic(res.user!.uid);
+
       sl<AppPreferences>().setUserToken(res.user!.uid);
       emit(state.copyWith(phoneAuthState: PhoneAuthState.loaded));
     } on FirebaseAuthException catch (e) {

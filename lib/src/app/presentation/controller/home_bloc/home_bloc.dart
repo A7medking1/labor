@@ -107,6 +107,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
                 servicesReqState: RequestStatus.error,
               ),
             ), (r) {
+          print(r);
       if (r.isEmpty) {
         emit(state.copyWith(servicesReqState: RequestStatus.empty));
       } else {

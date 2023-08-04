@@ -37,7 +37,7 @@ class _OnGoingTapState extends State<OnGoingTap> {
         final inReview = state.services
             .where((element) =>
                 (element.serviceStatus == 'in_review') ||
-                element.serviceStatus == 'accept')
+                element.serviceStatus == 'accepted')
             .toList();
 
         if (inReview.isEmpty) {
