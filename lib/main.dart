@@ -12,10 +12,12 @@ import 'package:labour/src/app/presentation/controller/payment_bloc/payment_cubi
 import 'package:labour/src/app/presentation/controller/profile_bloc/profile_bloc.dart';
 import 'package:labour/src/auth/presentation/controller/auth_bloc.dart';
 import 'package:labour/src/core/app_prefs/app_prefs.dart';
+import 'package:labour/src/core/notifications/handle_notifications.dart';
 import 'package:labour/src/core/resources/app_theme.dart';
-import 'package:labour/src/core/resources/language_manager.dart'; 
+import 'package:labour/src/core/resources/language_manager.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +29,11 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  NotificationHandler.init();
+  NotificationHandler.notificationPermission();
+
+
 
   await ServicesLocator().init();
   runApp(
@@ -57,6 +64,13 @@ class _MyAppState extends State<MyApp> {
       return context.setLocale(local);
     });
     super.didChangeDependencies();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    NotificationHandler.listenNotification();
   }
 
   @override
