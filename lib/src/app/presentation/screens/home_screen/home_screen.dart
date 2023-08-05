@@ -63,7 +63,7 @@ class HomeScreen extends StatelessWidget {
     return AppBar(
       centerTitle: true,
       leading: InkWell(
-        onTap: () {},
+        onTap: () async {},
         child: const Padding(
           padding: EdgeInsets.all(8.0),
           child: Badge(

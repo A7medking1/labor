@@ -3,6 +3,11 @@
 <plist version="1.0">
 <dict>
 
+<key>UIBackgroundModes</key>
+    <array>
+        <string>remote-notification</string>
+    </array>
+
 <key>NSLocationWhenInUseUsageDescription</key>
     <string>This app needs access to location when open.</string>
     <key>NSLocationAlwaysUsageDescription</key>

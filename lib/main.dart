@@ -17,7 +17,6 @@ import 'package:labour/src/core/resources/app_theme.dart';
 import 'package:labour/src/core/resources/language_manager.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -75,6 +74,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(context) {
+   // UserCredential().user?.delete();
     return ScreenUtilInit(
       designSize: const Size(414, 896),
       minTextAdapt: true,

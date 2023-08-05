@@ -54,11 +54,12 @@ class NotificationHandler {
 
   static void listenNotification() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+
       await pushNotification(message);
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');
 
-      NotificationHandler.pushNotification(message);
+     // NotificationHandler.pushNotification(message);
 
       if (message.notification != null) {
         print('Message also contained a notification: ${message.notification}');
