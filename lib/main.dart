@@ -1,5 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
@@ -18,21 +19,30 @@ import 'package:labour/src/core/resources/language_manager.dart';
 import 'package:labour/src/core/resources/routes_manager.dart';
 import 'package:labour/src/core/services_locator/services_locator.dart';
 
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await EasyLocalization.ensureInitialized();
 
   // Bloc.observer = MyBlocObserver();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
   NotificationHandler.init();
-  NotificationHandler.notificationPermission();
+  //NotificationHandler.notificationPermission();
 
+  /* FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
+  firebaseMessaging.getToken().then((value) {
+    print("token $value");
+  });*/
 
   await ServicesLocator().init();
   runApp(
@@ -74,7 +84,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(context) {
-   // UserCredential().user?.delete();
+    // UserCredential().user?.delete();
     return ScreenUtilInit(
       designSize: const Size(414, 896),
       minTextAdapt: true,

@@ -107,15 +107,15 @@ class _BuildListTilesScreenState extends State<BuildListTilesScreen> {
               body: AppStrings.logOut.tr(),
               leadingIcon: AppAssets.logout,
               onTap: () async {
-
                 final token = sl<AppPreferences>().getUserToken();
                 FirebaseMessaging.instance.unsubscribeFromTopic('users');
                 FirebaseMessaging.instance.unsubscribeFromTopic(token);
 
                 sl<AppPreferences>().removeUserToken();
                 sl<AppPreferences>().removeLocation();
-               // sl<AppPreferences>().removeOnBoarding();
-              //  sl<AppPreferences>().removeOnBoardingLang();
+                sl<AppPreferences>().removeOnBoarding();
+                sl<AppPreferences>().removeOnBoardingLang();
+
                 await FirebaseAuth.instance.signOut().then(
                   (value) {
                     context.goNamed(Routes.login);

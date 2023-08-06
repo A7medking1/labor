@@ -59,6 +59,9 @@ dependencies:
   rxdart: ^0.27.7
   firebase_messaging: ^14.6.5
   flutter_local_notifications: ^15.1.0+1
+
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
